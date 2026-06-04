@@ -1,0 +1,14 @@
+{
+  "HomePage": {
+    "title": "Dasbor Jarvis",
+    "greeting": "Selamat Datang, Pengguna.",
+    "status": "Status Sistem: Online"
+  },
+  "Navigation": {
+    "home": "Beranda",
+    "projects": "Proyek",
+    "experience": "Pengalaman",
+    "connectors": "Konektor",
+    "admin": "Admin"
+  }
+}

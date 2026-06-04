@@ -1,0 +1,14 @@
+{
+  "HomePage": {
+    "title": "Jarvis Dashboard",
+    "greeting": "Welcome, User.",
+    "status": "System Status: Online"
+  },
+  "Navigation": {
+    "home": "Home",
+    "projects": "Projects",
+    "experience": "Experience",
+    "connectors": "Connectors",
+    "admin": "Admin"
+  }
+}
