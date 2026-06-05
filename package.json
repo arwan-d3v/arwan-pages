@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "repair": "bash repair-env.sh"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.5.1",
@@ -17,6 +18,8 @@
     "next": "15.1.4",
     "next-intl": "^3.26.1",
     "next-themes": "^0.4.4",
+    "qrcode": "^1.5.4",
+    "qrcode.react": "^4.2.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "simple-icons": "^16.22.0",
@@ -26,6 +29,7 @@
     "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

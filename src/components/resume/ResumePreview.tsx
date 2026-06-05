@@ -7,6 +7,7 @@ import { getSkills } from "@/services/skillService";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import { ATSFormat } from "./ATSFormat";
 import { CreativeFormat } from "./CreativeFormat";
+import QRCode from 'qrcode';
 import { FileText, Download, Edit3, Eye, Settings2 } from "lucide-react";
 
 export default function ResumePreview() {
@@ -20,7 +21,16 @@ export default function ResumePreview() {
       const exp = await getExperiences();
       const skills = await getSkills();
 
+      let qrCodeDataUri = '';
+      try {
+        const url = `${window.location.origin}/en/projects`;
+        qrCodeDataUri = await QRCode.toDataURL(url);
+      } catch (err) {
+        console.error(err);
+      }
+
       setResumeData({
+        qrCode: qrCodeDataUri,
         personal: {
           name: user?.displayName || "System User",
           email: user?.email || "user@example.com",

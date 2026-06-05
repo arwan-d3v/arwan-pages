@@ -89,3 +89,13 @@ To grant yourself Admin access:
 4. Create a document with the **ID matching your Auth UID**.
 5. Add a field `role: "owner"`.
 6. *Daftarkan akun di website. Buka Firestore, buat koleksi `users`. Buat dokumen dengan ID yang sama dengan Auth UID Anda. Tambahkan field role: "owner".*
+
+---
+
+## 6. Troubleshooting Environment Issues
+
+### Native Binding Error (GitHub Codespaces)
+If you encounter an error like `Cannot find native binding` or `next/font` issues in Codespaces:
+1. Run the repair script: `npm run repair`.
+2. This will remove `node_modules` and `package-lock.json` and perform a clean `npm install`.
+3. *Jika Anda menemui error 'native binding' di Codespaces, jalankan: `npm run repair`.*

@@ -81,8 +81,11 @@ export const CreativeFormat = ({ data }: { data: any }) => (
 
         <View style={{ marginTop: 'auto', alignItems: 'center' }}>
            <Text style={{ fontSize: 7, color: '#666' }}>ID_VERIFIED_PROTOCOL</Text>
-           {/* QR Code Placeholder */}
-           <View style={{ width: 40, height: 40, backgroundColor: '#fff', marginTop: 5 }} />
+           {data.qrCode ? (
+             <Image src={data.qrCode} style={{ width: 60, height: 60, marginTop: 5, border: '1 solid #fff' }} />
+           ) : (
+             <View style={{ width: 40, height: 40, backgroundColor: '#fff', marginTop: 5 }} />
+           )}
         </View>
       </View>
 
