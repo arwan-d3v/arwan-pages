@@ -1,61 +1,110 @@
+import { useTranslations } from 'next-intl';
 import { TypewriterEffect } from '@/components/ui/TypewriterEffect';
-import { Header } from '@/components/layout/Header';
-import { getGitHubStats } from '@/lib/github';
+import { getGitHubStats, getRecentActivity } from '@/lib/github';
+import { getConnectors } from '@/services/connectorService';
+import { Terminal, GitBranch, MessageSquare, Star, Activity } from 'lucide-react';
 
 export default async function HomePage() {
-  const stats = await getGitHubStats("octocat"); // Placeholder username
+  const username = process.env.NEXT_PUBLIC_GITHUB_USERNAME || "octocat";
+  const stats = await getGitHubStats(username);
+  const gitActivities = await getRecentActivity(username);
+  const connectors = await getConnectors('user'); // Public only
+
+  // Interleave activities
+  const combinedFeed = [
+    ...gitActivities.map((a: any) => ({
+      id: a.id,
+      type: 'github',
+      title: a.type.replace("Event", "").replace(/([A-Z])/g, ' $1').trim(),
+      subtitle: a.repo.name,
+      date: new Date(a.created_at)
+    })),
+    ...connectors.map((c: any) => ({
+      id: c.id,
+      type: 'connector',
+      title: c.title,
+      subtitle: c.content.substring(0, 50) + '...',
+      date: c.createdAt?.toDate ? c.createdAt.toDate() : new Date()
+    }))
+  ].sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 10);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 font-mono relative overflow-hidden bg-gradient-to-tr from-gray-50 via-gray-100 to-gray-200 dark:from-primary dark:via-primary dark:to-primary transition-colors duration-500">
-      {/* Grid background */}
-      <div className="absolute inset-0 z-0 grid-bg opacity-40 dark:opacity-20 pointer-events-none" />
+    <main className="flex min-h-screen flex-col items-center justify-center p-6 md:p-24 font-mono relative overflow-hidden">
+      <div className="absolute inset-0 z-0 opacity-10 pointer-events-none"
+           style={{ backgroundImage: 'radial-gradient(var(--accent) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 
-      <Header />
+      <section className="z-10 text-center max-w-5xl w-full py-12">
+        <div className="mb-4 flex items-center justify-center gap-2 text-accent/60">
+          <Terminal size={16} />
+          <span className="text-[10px] uppercase tracking-[0.4em]">Establishing secure connection...</span>
+        </div>
 
-      <section className="z-10 text-center max-w-4xl w-full">
-        <h1 className="text-4xl md:text-6xl font-extrabold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-primary dark:bg-none dark:text-foreground tracking-tighter static-red-shadow">
+        <h1 className="text-4xl md:text-7xl font-bold mb-12 text-foreground tracking-tighter">
           <TypewriterEffect text="> INITIALIZING_SYSTEM_PROTOCOLS..." speed={40} />
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <StatCard label="UPTIME" value={stats.uptime} color="text-accent" darkColor="text-accent" />
-          <StatCard label="STARS" value={stats.stars.toString()} color="text-gray-800" darkColor="text-gray-100" />
-          <StatCard label="LOC" value={stats.linesOfCode.toLocaleString()} color="text-gray-800" darkColor="text-gray-100" />
-          <StatCard label="REPOS" value={stats.reposCount.toString()} color="text-accent" darkColor="text-accent" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+          <StatCard label="UPTIME" value={stats.uptime} color="text-accent" />
+          <StatCard label="STARS" value={stats.stars.toLocaleString()} color="text-accent" />
+          <StatCard label="LOC" value={stats.linesOfCode.toLocaleString()} color="text-accent" />
+          <StatCard label="REPOS" value={stats.reposCount.toString()} color="text-accent" />
         </div>
 
-        <div className="glass-card p-8 rounded-2xl relative overflow-hidden max-w-3xl mx-auto shadow-md dark:bg-neutral-900/40 dark:border dark:border-accent/20 dark:rounded-lg dark:max-w-none dark:shadow-none dark:backdrop-blur-md">
-          {/* Micro‑HUD details – Light mode only */}
-          <div className="flex items-center gap-2 mb-4 text-[10px] font-bold text-accent/80 border-b border-gray-200/40 pb-3 uppercase tracking-wider dark:hidden">
-            <span className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse inline-block" />
-            <span>[SYSTEM_STATUS: ACTIVE]</span>
-            <span className="ml-auto text-gray-400">SECURE_CHANNEL // Friday_OS_V21.03</span>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-left">
+           <div className="lg:col-span-2 space-y-6">
+              <div className="border border-accent/20 bg-background/40 p-8 backdrop-blur-md relative group">
+                <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+                <p className="text-lg md:text-xl text-foreground leading-relaxed">
+                  Welcome to the command center. System status is operational.
+                  Synchronizing multi-tier visibility protocols for authorized personnel.
+                </p>
+                <div className="mt-6 flex items-center gap-4 text-xs text-accent/60 uppercase tracking-widest">
+                   <span className="flex items-center gap-1.5"><div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> NETWORK_READY</span>
+                   <span className="flex items-center gap-1.5"><div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> DATABASE_SYNCED</span>
+                </div>
+              </div>
+           </div>
 
-          <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed font-mono">
-            Welcome to the command center. System status is operational. All modules are active.
-          </p>
+           <div className="lg:col-span-1">
+              <div className="border border-accent/10 bg-accent/5 p-6 backdrop-blur-sm h-full">
+                 <h3 className="text-xs font-bold uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                    <Activity size={14} className="text-accent" />
+                    System_Pulse_Feed
+                 </h3>
+                 <div className="space-y-4">
+                    {combinedFeed.map((item) => (
+                       <div key={item.id} className="text-[10px] border-l border-accent/20 pl-3 py-1 hover:border-accent transition-colors">
+                          <div className="flex items-center gap-2 text-accent/80 font-bold uppercase mb-0.5">
+                             {item.type === 'github' ? <GitBranch size={10} /> : <MessageSquare size={10} />}
+                             {item.title}
+                          </div>
+                          <div className="text-muted-foreground truncate">
+                             {item.subtitle}
+                          </div>
+                       </div>
+                    ))}
+                    {combinedFeed.length === 0 && (
+                      <p className="text-[10px] text-muted-foreground italic uppercase">[No recent signals detected]</p>
+                    )}
+                 </div>
+              </div>
+           </div>
         </div>
       </section>
-
-      {/* Footer placeholder */}
-      <footer className="footer mt-12">
-        <p>© 2026 Your Company – All rights reserved.</p>
-      </footer>
     </main>
   );
 }
 
-function StatCard({ label, value, color, darkColor }: { label: string, value: string, color: string, darkColor: string }) {
+function StatCard({ label, value, color }: { label: string, value: string, color: string }) {
   return (
-    <div className="glass-card p-6 rounded-xl relative overflow-hidden hover:-translate-y-1 hover:scale-[1.02] hover:border-accent/50 shadow-sm transition-all duration-300 group dark:bg-neutral-900/20 dark:backdrop-blur-sm dark:border dark:border-accent/10 dark:hover:border-accent/40 dark:p-4 dark:rounded-md dark:shadow-none dark:transform-none dark:hover:translate-y-0 dark:hover:scale-100">
-      {/* Left accent line – Light mode only */}
-      <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-accent/80 group-hover:w-[6px] transition-all duration-300 dark:hidden" />
-      
-      <div className="text-[10px] tracking-widest text-gray-400 mb-2 font-bold uppercase group-hover:text-accent transition-colors dark:text-xs dark:text-neutral-400 dark:mb-1 dark:normal-case dark:tracking-normal dark:group-hover:text-accent/80">
+    <div className="border border-accent/10 p-6 bg-background/20 backdrop-blur-sm hover:border-accent/30 transition-all group relative overflow-hidden">
+      <div className="absolute -right-4 -bottom-4 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
+         <Star size={80} />
+      </div>
+      <div className="text-[10px] text-muted-foreground mb-2 group-hover:text-accent/70 transition-colors uppercase tracking-widest">
         [{label}]
       </div>
-      <div className={`text-3xl font-extrabold tracking-tight ${color} dark:text-2xl dark:font-bold dark:tracking-normal ${darkColor} dark:crt-glow`}>
+      <div className={`text-2xl md:text-3xl font-bold ${color} font-mono tracking-tighter transition-transform group-hover:scale-105`}>
         {value}
       </div>
     </div>

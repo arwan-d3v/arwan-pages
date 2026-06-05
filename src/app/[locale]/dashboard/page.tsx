@@ -12,7 +12,7 @@ export default function CommandCenter() {
 
   if (loading) return (
     <div className="min-h-screen bg-background flex items-center justify-center font-mono">
-      <div className="text-neon-cyan animate-pulse text-2xl">AUTHENTICATING_USER_IDENTITY...</div>
+      <div className="text-accent animate-pulse text-2xl">AUTHENTICATING_USER_IDENTITY...</div>
     </div>
   );
 
@@ -40,16 +40,16 @@ export default function CommandCenter() {
   return (
     <main className="min-h-screen bg-background font-mono p-24">
       <Header />
-      <div className="flex justify-between items-end mb-12 border-b border-neon-emerald/30 pb-4">
+      <div className="flex justify-between items-end mb-12 border-b border-accent/30 pb-4">
         <div>
-          <h1 className="text-4xl font-bold text-neon-emerald crt-glow flex items-center gap-4">
+          <h1 className="text-4xl font-bold text-accent crt-glow flex items-center gap-4">
             <Lock className="w-8 h-8" /> COMMAND_CENTER_V1
           </h1>
-          <p className="text-neon-emerald/60 mt-2">ACCESS_LEVEL: [{role?.toUpperCase()}] - {role === 'owner' ? 'FULL_WRITE_ACCESS' : 'VIEW_ONLY_ACCESS'}</p>
+          <p className="text-accent/60 mt-2">ACCESS_LEVEL: [{role?.toUpperCase()}] - {role === 'owner' ? 'FULL_WRITE_ACCESS' : 'VIEW_ONLY_ACCESS'}</p>
         </div>
         <div className="text-right">
           <div className="text-xs text-muted-foreground mb-1">SESSION_STABILITY</div>
-          <div className="text-xl font-bold text-neon-emerald">STABLE_99.9%</div>
+          <div className="text-xl font-bold text-accent">STABLE_99.9%</div>
         </div>
       </div>
 
@@ -79,20 +79,20 @@ export default function CommandCenter() {
 
 function ModuleCard({ title, status, description, role }: { title: string, status: string, description: string, role: string | null }) {
   return (
-    <div className="border border-neon-emerald/20 bg-black/40 p-6 rounded-md hover:border-neon-emerald/50 transition-all group">
+    <div className="border border-accent/20 bg-background/40 p-6 rounded-md hover:border-accent/50 transition-all group">
       <div className="flex justify-between items-start mb-4">
-        <h3 className="text-xl font-bold text-neon-emerald/80">{title}</h3>
-        <span className="text-[10px] px-2 py-1 bg-neon-emerald/10 text-neon-emerald border border-neon-emerald/20">{status}</span>
+        <h3 className="text-xl font-bold text-accent/80">{title}</h3>
+        <span className="text-[10px] px-2 py-1 bg-accent/10 text-accent border border-accent/20">{status}</span>
       </div>
       <p className="text-sm text-muted-foreground mb-6 h-12">{description}</p>
 
       <div className="flex justify-between items-center">
         {role === 'owner' ? (
-          <button className="text-xs font-bold text-neon-emerald border border-neon-emerald/30 px-4 py-2 hover:bg-neon-emerald/10 transition-all">
+          <button className="text-xs font-bold text-accent border border-accent/30 px-4 py-2 hover:bg-accent/10 transition-all">
             [ACCESS_AND_MODIFY]
           </button>
         ) : (
-          <button className="text-xs font-bold text-neon-emerald/50 border border-neon-emerald/10 px-4 py-2 flex items-center gap-2 cursor-not-allowed">
+          <button className="text-xs font-bold text-accent/50 border border-accent/10 px-4 py-2 flex items-center gap-2 cursor-not-allowed">
             <Eye className="w-4 h-4" /> [VIEW_ONLY_MODE]
           </button>
         )}
