@@ -9,7 +9,7 @@ import { getMessages } from 'next-intl/server';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Jarvis Dashboard",
+  title: "Friday_OS V21.03 Dashboard",
   description: "Personal Company Profile & Dashboard",
 };
 
@@ -31,7 +31,7 @@ export default async function RootLayout({
             <ThemeProvider
               attribute="class"
               defaultTheme="dark"
-              enableSystem
+              enableSystem={false}
               disableTransitionOnChange
             >
               <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
